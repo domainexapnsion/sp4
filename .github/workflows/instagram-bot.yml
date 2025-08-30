@@ -1,26 +1,66 @@
-name: Instagram Reels Bot
+# .github/workflows/instagram-bot.yml
+name: Instagram Reels Auto-Reposter
 
 on:
   schedule:
-    - cron: '0 9,21 * * *'   # Run at 9 AM and 9 PM UTC
-  workflow_dispatch:          # Manual trigger
+    - cron: '0 9 * * *'    # 9 AM UTC daily
+    - cron: '0 15 * * *'   # 3 PM UTC daily (optional second run)
+  workflow_dispatch:       # Manual trigger
 
 jobs:
-  run-bot:
+  repost-reels:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - name: Install dependencies
-        run: |
-          pip install requests yt-dlp schedule
-      - name: Run Instagram Bot
-        env:
-          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-          INSTAGRAM_PAGE_ID: ${{ secrets.INSTAGRAM_PAGE_ID }}
-          INSTAGRAM_APP_ID: ${{ secrets.INSTAGRAM_APP_ID }}
-          INSTAGRAM_APP_SECRET: ${{ secrets.INSTAGRAM_APP_SECRET }}
-        run: python bot.py
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Restore processed posts
+      uses: actions/cache@v3
+      with:
+        path: |
+          processed_posts.json
+          session.json
+          backups/
+        key: instagram-bot-data-${{ github.run_number }}
+        restore-keys: |
+          instagram-bot-data-
+          
+    - name: Run Instagram Bot
+      env:
+        INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        INSTAGRAM_PAGE_ID: ${{ secrets.INSTAGRAM_PAGE_ID }}
+        INSTAGRAM_APP_ID: ${{ secrets.INSTAGRAM_APP_ID }}
+        INSTAGRAM_APP_SECRET: ${{ secrets.INSTAGRAM_APP_SECRET }}
+        PYTHONUNBUFFERED: 1
+      run: |
+        python instagram_bot.py
+        
+    - name: Upload logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: bot-logs-${{ github.run_number }}
+        path: |
+          instagram_bot.log
+          processed_posts.json
+        retention-days: 30
