@@ -374,7 +374,7 @@ class InstagramReelsBot:
         # You can manually add URLs here for testing
         test_urls = [
             # Add some Instagram reel URLs here for testing
-            # "https://www.instagram.com/reel/EXAMPLE123/",
+            # "https://www.instagram.com/reels/DHaAHSPygJW/",
         ]
         
         if test_urls:
@@ -419,7 +419,7 @@ class InstagramReelsBot:
             return []
         
         patterns = [
-            r'https?://(?:www\.)?instagram\.com/reel/([A-Za-z0-9_-]+)/?(?:\?[^\s]*)?',
+            r'https?://(?:www\.)?instagram\.com/reels/([A-Za-z0-9_-]+)/?(?:\?[^\s]*)?',
             r'https?://(?:www\.)?instagram\.com/p/([A-Za-z0-9_-]+)/?(?:\?[^\s]*)?',
             r'https?://(?:www\.)?instagram\.com/tv/([A-Za-z0-9_-]+)/?(?:\?[^\s]*)?',
         ]
@@ -428,7 +428,7 @@ class InstagramReelsBot:
         for pattern in patterns:
             matches = re.findall(pattern, text, re.IGNORECASE)
             for match in matches:
-                full_url = f"https://www.instagram.com/reel/{match}/"
+                full_url = f"https://www.instagram.com/reels/{match}/"
                 
                 url_hash = hashlib.md5(full_url.encode()).hexdigest()
                 if url_hash not in [hashlib.md5(url.encode()).hexdigest() for url in self.processed_posts]:
@@ -985,3 +985,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
