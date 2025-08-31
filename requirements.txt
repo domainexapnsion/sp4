@@ -1,0 +1,6 @@
+
+# requirements.txt
+requests>=2.31.0
+yt-dlp>=2023.7.6
+schedule>=1.2.0
+pathlib2>=2.3.7
