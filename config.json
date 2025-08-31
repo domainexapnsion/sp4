@@ -1,0 +1,31 @@
+# config.json - Configuration template
+{
+  "bot_settings": {
+    "max_reels_per_run": 10,
+    "min_delay_between_posts": 45,
+    "max_delay_between_posts": 90,
+    "max_video_duration": 300,
+    "backup_retention_days": 7,
+    "health_check_interval_hours": 6
+  },
+  "human_behavior": {
+    "reading_speed_wpm": 200,
+    "typing_speed_wpm": 40,
+    "min_browsing_delay": 3,
+    "max_browsing_delay": 8,
+    "min_processing_delay": 2,
+    "max_processing_delay": 5
+  },
+  "api_settings": {
+    "rate_limit_delay": 2,
+    "max_retries": 3,
+    "backoff_factor": 2,
+    "request_timeout": 30
+  },
+  "content_filters": {
+    "max_caption_length": 2200,
+    "blocked_keywords": ["spam", "fake", "scam"],
+    "required_video_formats": [".mp4", ".mov", ".avi"],
+    "max_file_size_mb": 100
+  }
+}
