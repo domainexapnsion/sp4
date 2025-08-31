@@ -373,8 +373,7 @@ class InstagramReelsBot:
         
         # You can manually add URLs here for testing
         test_urls = [
-            # Add some Instagram reel URLs here for testing
-            # "https://www.instagram.com/reels/DHaAHSPygJW/",
+             "https://www.instagram.com/reels/DHaAHSPygJW/",
         ]
         
         if test_urls:
@@ -985,4 +984,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
